@@ -1,7 +1,7 @@
 const TagModel = require("../database/models/tag_model")
 
 async function index(req, res) {
-    const tags = await TagModel.find()
+    const tags = await TagModel.find({is_active: true})
         .catch(err => res.status(500).send(err));
     res.json(tags);
 }
