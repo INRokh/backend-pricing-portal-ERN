@@ -1,6 +1,6 @@
 
-const router = require("express").Router();
-const { celebrate, Joi } = require("celebrate");
+const router = require('express').Router();
+const { celebrate, Joi } = require('celebrate');
 
 // List all tags.
 router.get('/', (req, res) => {

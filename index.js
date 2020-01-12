@@ -1,4 +1,5 @@
-require('dotenv').config();  // Port number below.
+require('dotenv').config();  
+require('./database/connect');
 const app = require('./app');
 
 app.listen(
