@@ -1,11 +1,9 @@
-
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const TagController = require('../controllers/tag_controller')
 
 // List all tags.
-router.get('/', (req, res) => {
-    res.json({});
-});
+router.get('/', TagController.index);
 
 // Batch create tags.
 router.post(
@@ -15,7 +13,7 @@ router.post(
             tags: Joi.array().items(Joi.string().required()).min(1)
         }
     }),
-    (req, res) => {res.json({})}
+    TagController.create
 );
 
 // PUT is not supported, we don't need to re-write all tags.
@@ -27,11 +25,11 @@ router.patch(
         body: { 
             tags: Joi.array().items(Joi.object({
                 id: Joi.string().required(),
-                tag: Joi.string().required()
+                title: Joi.string().required()
             })).min(1)
         }
     }),
-    (req, res) => {res.json({})}
+    TagController.update
 );
 
 // Batch delete tags by IDs.
@@ -42,7 +40,7 @@ router.delete(
             ids: Joi.array().items(Joi.string().required()).min(1)
         }
     }),
-    (req, res) => {res.json({})}
+    TagController.destroy
 );
 
 module.exports = router;
