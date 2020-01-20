@@ -11,6 +11,7 @@ const TagSchema = new Schema({
         default: true,
         required: true
     }
+    //add user ref 
 })
 
 module.exports = TagSchema;
