@@ -12,7 +12,7 @@ router.post(
     celebrate({
         body: {
             images: Joi.array().items(Joi.object({
-                title: Joi.string().required(),
+                //title: Joi.string().required(),
                 url: Joi.string().required()
             })).min(1)
         }
