@@ -1,5 +1,5 @@
 {
-  "name": "waldo-experiment",
+  "name": "backend-pricing-portal",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/INRokh/waldo-experiment.git"
+    "url": "git+https://github.com/INRokh/backend-pricing-portal-ERN"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/INRokh/waldo-experiment/issues"
+    "url": "https://github.com/INRokh/backend-pricing-portal-ERN/issues"
   },
-  "homepage": "https://github.com/INRokh/waldo-experiment#readme",
+  "homepage": "https://github.com/INRokh/backend-pricing-portal-ERN#readme",
   "dependencies": {
     "aws-sdk": "^2.607.0",
     "celebrate": "^11.0.1",
