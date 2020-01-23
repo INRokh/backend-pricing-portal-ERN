@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/INRokh/backend-pricing-portal-ERN#readme",
   "dependencies": {
+    "aws-sdk": "^2.607.0",
     "celebrate": "^11.0.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

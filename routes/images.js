@@ -2,6 +2,9 @@ const router = require("express").Router();
 const { celebrate, Joi } = require("celebrate");
 const ImageController = require("../controllers/image_controller");
 
+//Upload image from React to Express
+router.post("/upload", ImageController.uploadfromReact);
+
 // List all images.
 router.get("/", ImageController.index);
 
