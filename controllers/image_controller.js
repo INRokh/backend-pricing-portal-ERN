@@ -7,7 +7,8 @@ const storage = multer.diskStorage({
     cb(null, "uploadFromReact");
   },
   filename: function(req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    const ext = file.mimetype.split("/")[1];
+    cb(null, file.originalname + "_" + Date.now() + "." + ext);
   }
 });
 const upload = multer({ storage: storage }).array("file");
