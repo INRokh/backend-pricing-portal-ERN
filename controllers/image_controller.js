@@ -1,51 +1,36 @@
 const ImageModel = require("../database/models/image_model");
-
-//Upload image from React to Express
+const uuidv4 = require('uuid/v4');
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_KEY_ID,
-  secretAccessKey: process.env.AWS_KEY_SECRET
-});
+const s3 = new AWS.S3();
 
-function uploadfromReact(req, res) {
-  const upload = multer({
-    storage: multerS3({
-      s3: s3,
-      bucket: process.env.BUCKET_NAME,
-      metadata: function(req, file, cb) {
-        cb(null, { fieldName: file.fieldname });
-      },
-      key: function(req, file, cb) {
-        const ext = file.mimetype.split("/")[1];
-        cb(null, file.originalname + "_" + Date.now() + "." + ext);
-      }
-    })
-  }).array("file");
 
-  upload(req, res, function(err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(500).json(err);
-    } else if (err) {
-      return res.status(500).json(err);
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.BUCKET_NAME,
+    key: function(req, file, cb) {
+      const ext = file.mimetype.split("/")[1];
+      cb(null, uuidv4() + "." + ext);
+    }
+  })
+}).array("file");
+
+function uploadFiles(req, res) {
+  upload(req, res, async function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    let newImagesUploaded = [];
+    for (let f of req.files) {
+      newImagesUploaded.push({ s3key: f.key });
     }
 
-    //file all good saved to s3
-    //now need to save key into database
-    // return res.status(200).send(req.file);
-    console.log(req.files[0].key);
-
-    const newImageUploaded = {
-      s3Key: req.files[0].key
-    };
-
-    const document = new ImageModel(newImageUploaded);
-    document.save(function(error, newFile) {
-      if (error) {
-        throw error;
-      }
-    });
+    const images = await ImageModel.insertMany(newImagesUploaded).catch(err =>
+      res.status(500).send(err)
+    );
+    res.json(images);
   });
 }
 
@@ -56,10 +41,17 @@ async function index(req, res) {
   res.json(images);
 }
 
+function show(req, res) {
+  s3.getObject({ Key: req.params.key, Bucket: process.env.BUCKET_NAME })
+    .createReadStream()
+    .on("error", err => res.status(500).send(err))
+    .pipe(res);
+}
+
 async function create(req, res) {
   let imageObjs = [];
   for (let image of req.body.images) {
-    imageObjs.push({ title: image.title, url: image.url });
+    imageObjs.push({ s3key: image.s3key });
   }
   const images = await ImageModel.insertMany(imageObjs).catch(err =>
     res.status(500).send(err)
@@ -68,7 +60,6 @@ async function create(req, res) {
 }
 
 async function destroy(req, res) {
-  console.log(req.body);
   let deletedImages = [];
   for (let id of req.body.ids) {
     deletedImages.push(
@@ -81,13 +72,11 @@ async function destroy(req, res) {
 }
 
 async function update(req, res) {
-  console.log(req.body);
   let updatedImage = [];
   for (let image of req.body.images) {
     updatedImage.push(
       await ImageModel.findByIdAndUpdate(image.id, {
-        title: image.title,
-        url: image.url
+        s3key: image.s3key,
       }).catch(err => res.status(500).send(err))
     );
   }
@@ -95,9 +84,10 @@ async function update(req, res) {
 }
 
 module.exports = {
-  index,
   create,
   destroy,
+  index,
+  show,
   update,
-  uploadfromReact
+  uploadFiles
 };
