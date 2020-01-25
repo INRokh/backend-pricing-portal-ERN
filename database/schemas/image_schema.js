@@ -1,7 +1,7 @@
 const { Schema } = require("mongoose");
 
 const ImageSchema = new Schema({
-  s3Key: {
+  s3key: {
     type: String,
     required: true
   },
