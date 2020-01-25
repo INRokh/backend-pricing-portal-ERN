@@ -3,10 +3,12 @@ const { celebrate, Joi } = require("celebrate");
 const ImageController = require("../controllers/image_controller");
 
 //Upload image from React to Express
-router.post("/upload", ImageController.uploadfromReact);
+router.post("/upload", ImageController.uploadFiles);
 
 // List all images.
 router.get("/", ImageController.index);
+
+router.get("/:key", ImageController.show);
 
 // Batch create images.
 router.post(
@@ -16,8 +18,7 @@ router.post(
       images: Joi.array()
         .items(
           Joi.object({
-            title: Joi.string().required(),
-            url: Joi.string().required()
+            s3key: Joi.string().required(),
           })
         )
         .min(1)
@@ -48,8 +49,7 @@ router.patch(
         .items(
           Joi.object({
             id: Joi.string().required(),
-            title: Joi.string().required(),
-            url: Joi.string().required()
+            s3key: Joi.string().required()
           })
         )
         .min(1)
