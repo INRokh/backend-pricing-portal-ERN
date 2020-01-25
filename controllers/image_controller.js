@@ -35,7 +35,7 @@ function uploadFiles(req, res) {
 }
 
 async function index(req, res) {
-  const images = await ImageModel.find({ is_active: true }).catch(err =>
+  const images = await ImageModel.find().catch(err =>
     res.status(500).send(err)
   );
   res.json(images);
