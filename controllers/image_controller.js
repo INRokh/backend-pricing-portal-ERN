@@ -30,9 +30,22 @@ function uploadfromReact(req, res) {
     } else if (err) {
       return res.status(500).json(err);
     }
+
     //file all good saved to s3
     //now need to save key into database
-    return res.status(200).send(req.file);
+    // return res.status(200).send(req.file);
+    console.log(req.files[0].key);
+
+    const newImageUploaded = {
+      s3Key: req.files[0].key
+    };
+
+    const document = new ImageModel(newImageUploaded);
+    document.save(function(error, newFile) {
+      if (error) {
+        throw error;
+      }
+    });
   });
 }
 
