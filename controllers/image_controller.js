@@ -4,28 +4,34 @@ const ImageModel = require("../database/models/image_model");
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-const s3 = new AWS.S3();
-
-const upload = multer({
-  storage: multerS3({
-    s3: s3,
-    bucket: process.env.BUCKET_NAME,
-    metadata: function(req, file, cb) {
-      cb(null, { fieldName: file.fieldname });
-    },
-    key: function(req, file, cb) {
-      cb(null, file.originalname);
-    }
-  })
-}).array("file");
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_KEY_ID,
+  secretAccessKey: process.env.AWS_KEY_SECRET
+});
 
 function uploadfromReact(req, res) {
+  const upload = multer({
+    storage: multerS3({
+      s3: s3,
+      bucket: process.env.BUCKET_NAME,
+      metadata: function(req, file, cb) {
+        cb(null, { fieldName: file.fieldname });
+      },
+      key: function(req, file, cb) {
+        const ext = file.mimetype.split("/")[1];
+        cb(null, file.originalname + "_" + Date.now() + "." + ext);
+      }
+    })
+  }).array("file");
+
   upload(req, res, function(err) {
     if (err instanceof multer.MulterError) {
       return res.status(500).json(err);
     } else if (err) {
       return res.status(500).json(err);
     }
+    //file all good saved to s3
+    //now need to save key into database
     return res.status(200).send(req.file);
   });
 }
