@@ -13,7 +13,7 @@ const ImageSchema = new Schema({
     type: String,
     required: false
   },
-  projectDescription: {
+  productDescription: {
     type: String,
     required: false
   }
