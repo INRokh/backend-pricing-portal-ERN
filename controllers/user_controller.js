@@ -10,13 +10,9 @@ function index(req, res){
 // Generate JWT 
 function login(req, res){
   res.json(
-    {token: jwt.userToken(req.user)}
+    {token: jwt.userToToken(req.user)}
   );
 }
-
-// function logout(req, res){
-//     req.user.logout();
-// }
 
 function register(req, res, next){
   const newUser = new User({username: req.body.username,
