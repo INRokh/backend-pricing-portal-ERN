@@ -1,20 +1,35 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const UserController = require('../controllers/user_controller');
+const passport = require('passport');
 
 // Joi API: https://github.com/hapijs/joi/blob/v14.3.1/API.md
 
-router.post('/', celebrate({
-    body: { 
-        name: Joi.string().name().required(),
-        email: Joi.string().email().required(),
-        password: Joi.string().required(),
-
-    }
-}), UsersController.register);
-
-router.post('/login', 
-  passport.authenticate('local', { session : false }),
-  UsersController.login
+// Get list of all users 
+router.get('/',
+  passport.authenticate('jwt', { session : false }),
+  UserController.index
 );
 
-module.export = router;
+// Create a new user
+router.post('/', celebrate({
+  body: { 
+      username: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+  }
+  }), 
+  UserController.register);
+
+// Get jwt token using passport-local-mongoose strategy 
+router.post('/login', celebrate({
+  body: {
+    username: Joi.string().required(),
+    password: Joi.string().required()
+  }
+  }),
+  passport.authenticate('local', { session : false }),
+  UserController.login
+);
+
+module.exports = router;
