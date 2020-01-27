@@ -3,7 +3,7 @@ const { Schema } = require("mongoose");
 const ImageSchema = new Schema({
   s3key: {
     type: String,
-    required: true
+    required: false
   },
   lot: {
     type: Number,
@@ -13,7 +13,7 @@ const ImageSchema = new Schema({
     type: String,
     required: false
   },
-  projectDescription: {
+  productDescription: {
     type: String,
     required: false
   }

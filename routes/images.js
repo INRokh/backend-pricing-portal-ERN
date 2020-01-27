@@ -3,7 +3,7 @@ const { celebrate, Joi } = require("celebrate");
 const ImageController = require("../controllers/image_controller");
 
 //Upload image from React to Express
-router.post("/upload", ImageController.uploadFiles);
+router.post("/", ImageController.uploadFiles);
 
 // List all images.
 router.get("/", ImageController.index);
@@ -18,7 +18,7 @@ router.post(
       images: Joi.array()
         .items(
           Joi.object({
-            s3key: Joi.string().required(),
+            s3key: Joi.string().required()
           })
         )
         .min(1)
