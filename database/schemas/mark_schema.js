@@ -1,4 +1,6 @@
-const {Schema} = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
 const CoordinatesSchema = require('./coordinates_schema')
 
 const MarkSchema = new Schema({
