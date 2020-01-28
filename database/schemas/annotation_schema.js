@@ -4,7 +4,7 @@ const MarkSchema = require('../schemas/mark_schema');
 
 const AnnotationSchema = new Schema({
     marks: [MarkSchema],
-    image: {
+    image_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Image"
     },

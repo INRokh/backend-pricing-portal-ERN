@@ -2,41 +2,28 @@ const AnnotationModel = require("../database/models/annotation_model");
 const UserModel = require('../database/models/user_model');
 const ImageModel = require('../database/models/image_model');
 
-// show annotations for particular user
-// async function index(req, res) {
-//     //console.log(req.user)
-//     const annotations = await AnnotationModel.find({user: req.user})
-//         .catch(err => res.status(500).send(err));
-//     res.json(annotations);
-// }
-
 async function index(req, res) {
-    //console.log(req.user)
-    const annotations = await AnnotationModel.find({user_id: req.user})
-        .catch(err => res.status(500).send(err));
-    res.json(annotations);
+  // find({user_id: ....})....show for current user
+  const annotations = await AnnotationModel.find()
+    .catch(err => res.status(500).send(err));
+  res.json(annotations);
+};
+
+async function create(req, res){
+  const {image_id, user_id} = req.body;
+  // check if image and user exists in database
+  const image = await ImageModel.findById(image_id)
+    .catch(err => res.status(500).send(err))
+  const user = await UserModel.findById(user_id)
+    .catch(err => res.status(500).send(err))
+  // create annotation 
+  // Saving refs to other documents works the same way you normally save properties, just assign the _id value
+  const annotation = await AnnotationModel.create({image_id, user_id})
+    .catch(err => re.status(500).send(err))
+  res.send(annotation)
 }
 
 module.exports = {
-    index
+    index,
+    create
   };
-
-
-
-
-// async function create(req, res) {
-//   // Check that both user ID and image ID are valid by finding correspondin
-//   // objects in database.
-//   const image = await ImageModel.findById(req.image_id)
-//     .catch(err => res.status(500).send(err));
-//   const user = await UserModel.findById(req.user_id)
-//     .catch(err => res.status(500).send(err));
-//   // https://mongoosejs.com/docs/populate.html#saving-refs
-//   let annotationObj = {
-//       image: image._id,
-//       user: user._id
-//   };
-//   const annotation = await AnnotationModel.create(annotationObj)
-//     .catch(err => res.status(500).send(err));
-//   res.send(annotation);
-// }
