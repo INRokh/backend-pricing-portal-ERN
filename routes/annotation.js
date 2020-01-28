@@ -14,4 +14,33 @@ router.post(
   }), AnnotationController.create
 )
 
+router.put(
+  "/marks",
+  celebrate({
+    body: {
+      marks: Joi.array().items(Joi.object({
+        tag_id: Joi.string().required(),
+        coordinates: Joi.object({
+          x: Joi.number().required(),
+          y: Joi.number().required()
+        })
+      }))
+    }
+  })
+)
+
+// router.put('/marks',
+//   celebrate({
+//     body: {
+//         marks: Joi.array().items(Joi.object({
+//           tag_id: Joi.string().required(),
+//           coordinates: Joi.array().items(Joi.object({
+//             x: Joi.number().required(),
+//             y: Joi.number().required()
+//           }))
+//       }))
+//   }}), AnnotationController.update
+//   )
+
+
 module.exports = router;

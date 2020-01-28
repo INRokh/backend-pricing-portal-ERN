@@ -23,6 +23,10 @@ async function create(req, res){
   res.send(annotation)
 }
 
+async function updateMarks(req, res){
+
+}
+
 module.exports = {
     index,
     create
