@@ -32,6 +32,18 @@ async function create(req, res){
 async function rewriteMarks(req, res){
   let annotation = await AnnotationModel.findById(req.params.id)
     .catch(err => res.status(404).send("annotation not found" + err))
+
+  // mongodb.github.io/node-mongodb-native/api-bson-generated/objectid.html
+  // check user 
+  if(!req.user._id.equals(annotation.user_id)){
+    return res.status(403).send("acsess denied for current user")
+  }
+  console.log(annotation.status)
+  // check annotation status
+  if(annotation.status !== "NEW" && annotation.status !== "IN_PROGRESS"){
+    return res.status(403).send("changes can't be made")
+  }
+
   const {marks} = req.body;
   let markObjs = [];
   for (let i in marks) {
@@ -49,9 +61,11 @@ async function rewriteMarks(req, res){
   }
 
   annotation.marks = markObjs;
+  if(annotation.status === "NEW"){
+    annotation.status = "IN_PROGRESS"
+  }
   await annotation.save()
     .catch(err => res.status(500).send(err));
-  // console.log(annotation)
   res.send(annotation.marks)
 }
 
