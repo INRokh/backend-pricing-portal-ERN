@@ -10,7 +10,7 @@ const AnnotationSchema = new Schema({
     },
     status: {
         type: String,
-        enum: ["NEW", "IN_PROGRESS", "IN_REVIEW", "DONE"],
+        enum: ["NEW", "IN_PROGRESS", "REVIEW", "COMPLETED"],
         default: "NEW"
     },
     user_id: {
