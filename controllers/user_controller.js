@@ -27,8 +27,19 @@ function register(req, res, next){
   );
 }
 
+function userInfo(req, res, next){
+  res.json({
+    id: req.user._id,
+    username: req.user.username,
+    email: req.user.email,
+    is_active: req.user.is_active,
+    is_admin: req.user.is_admin
+  });
+}
+
 module.exports = {
   index,
   login,
-  register
+  register,
+  userInfo
 }
