@@ -23,7 +23,7 @@ function register(req, res, next){
   User.register(
     newUser,
     req.body.password,
-    err => err ? next(err) : res.send('Ok')
+    err => err ? res.status(500).send(err) : res.send('Ok')
   );
 }
 
