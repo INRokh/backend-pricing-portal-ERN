@@ -4,6 +4,8 @@ const AnnotationController = require("../controllers/annotation_controller");
 
 router.get('/', AnnotationController.index);
 
+router.get('/:id', AnnotationController.showAnnotation);
+
 // create annotation
 router.post(
   "/",
