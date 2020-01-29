@@ -1,18 +1,22 @@
-const {Schema} = require('mongoose');
-const MarkShema = require('./mark_schema');
+const mongoose = require('mongoose') 
+const Schema = mongoose.Schema
+const MarkSchema = require('../schemas/mark_schema');
 
 const AnnotationSchema = new Schema({
-    marks: [MarkShema],
-    image: {
+    marks: [MarkSchema],
+    image_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Image"
     },
-    is_active: {
-        type: Boolean,
-        default: true,
-        required: true
+    status: {
+        type: String,
+        enum: ["NEW", "IN_PROGRESS", "REVIEW", "COMPLETED"],
+        default: "NEW"
+    },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
-    //add user ref 
 })
 
-module.exports = AnnotationSchema;
+module.exports = AnnotationSchema; 
