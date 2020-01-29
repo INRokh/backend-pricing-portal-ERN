@@ -32,4 +32,9 @@ router.post('/login', celebrate({
   UserController.login
 );
 
+router.get('/me',
+  passport.authenticate('jwt', { session : false }),
+  UserController.userInfo 
+)
+
 module.exports = router;
