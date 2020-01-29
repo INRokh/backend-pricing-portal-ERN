@@ -76,16 +76,40 @@ async function rewriteMarks(req, res){
   res.send(annotation.marks)
 }
 
+async function approve(req, res) {
+  const annotation = await AnnotationModel.findById(req.params.id)
+    .catch(err => res.status(500).send(err));
+  annotation.status = "COMPLETED"
+  await annotation.save()
+    .catch(err => res.status(500).send(err));
+  res.json(annotation);
+};
+
+
+async function reject(req, res) {
+  const annotation = await AnnotationModel.findById(req.params.id)
+    .catch(err => res.status(500).send(err));
+  annotation.status = "NEW"
+  await annotation.save()
+    .catch(err => res.status(500).send(err));
+  res.json(annotation);
+};
+
+async function review(req, res) {
+  const annotation = await AnnotationModel.findById(req.params.id)
+    .catch(err => res.status(500).send(err));
+  annotation.status = "REVIEW"
+  await annotation.save()
+    .catch(err => res.status(500).send(err));
+  res.json(annotation);
+};
+
 module.exports = {
   index,
   create,
   rewriteMarks,
-  showAnnotation
+  showAnnotation,
+  approve,
+  reject,
+  review
 };
-
-/*
-TO_DO:
-- reject
-- approve
-- review
-*/

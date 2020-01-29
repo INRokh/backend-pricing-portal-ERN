@@ -2,9 +2,9 @@ const router = require("express").Router();
 const { celebrate, Joi } = require("celebrate");
 const AnnotationController = require("../controllers/annotation_controller");
 
-router.get('/', AnnotationController.index);
+router.get("/", AnnotationController.index);
 
-router.get('/:id', AnnotationController.showAnnotation);
+router.get("/:id", AnnotationController.showAnnotation);
 
 // create annotation
 router.post(
@@ -37,25 +37,16 @@ router.put(
   }), AnnotationController.rewriteMarks
 );
 
-
-/*
-TO_DO:
-
-router.get(
-  "/:id"
+router.patch(
+  "/reject/:id", AnnotationController.reject
 )
-router.post(
-  "/review"
-);
 
-router.post(
-  "/reject",
-);
+router.patch(
+  "/approve/:id", AnnotationController.approve
+)
 
-router.post(
-  "/approve",
-})
-);
-*/
+router.patch(
+  "/review/:id", AnnotationController.review
+)
 
 module.exports = router;
