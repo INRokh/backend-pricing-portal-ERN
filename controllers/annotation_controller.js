@@ -4,7 +4,7 @@ const ImageModel = require('../database/models/image_model');
 
 // show assigned annotations to user
 async function index(req, res) {
-  const annotations = await AnnotationModel.find({user_id: req.user._id})
+  const annotations = await AnnotationModel.find({user_id: req.user._id}).populate('image_id')
     .catch(err => res.status(500).send(err));
   res.json(annotations);
 };
@@ -12,7 +12,7 @@ async function index(req, res) {
 // show annotation by id
 async function showAnnotation(req, res) {
   console.log(req.params.id)
-  const annotation = await AnnotationModel.findById(req.params.id).populate('Image', 'User')
+  const annotation = await AnnotationModel.findById(req.params.id).populate(['image_id', 'user_id'])
     .catch(err => res.status(500).send(err));
   console.log(annotation)
   res.json(annotation);
