@@ -10,7 +10,7 @@ router.post(
     '/',
     celebrate({
         body: { 
-            tags: Joi.array().items(Joi.string().required()).min(1)
+            tags: Joi.array().items(Joi.string().required()).min(1).required()
         }
     }),
     TagController.create

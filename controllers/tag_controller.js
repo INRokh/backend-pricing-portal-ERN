@@ -9,11 +9,15 @@ async function index(req, res) {
 async function create(req, res) {
     let tagObjs = [];
     for (let tagLabel of req.body.tags) {
+        console.log(tagLabel)
         tagObjs.push({title: tagLabel});
     }
-    const tags = await TagModel.insertMany(tagObjs)
-        .catch(err => res.status(500).send(err));
-    res.send(tags);
+    if (!tagObjs) {
+        res.send();
+    }
+    TagModel.insertMany(tagObjs)
+      .catch(err => res.status(500).send(err))
+      .then(tags => res.json(tags));
 }
 
 async function destroy(req, res) {

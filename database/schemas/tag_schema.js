@@ -8,12 +8,7 @@ const TagSchema = new Schema({
   },
   is_active: {
     type: Boolean,
-    default: true,
-    required: true
-  },
-  created_by: {
-    type: String,
-    required: true
+    default: true
   }
 })
 
