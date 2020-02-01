@@ -66,27 +66,24 @@ async function create(req, res) {
 }
 
 async function destroy(req, res) {
-  let deletedImages = [];
-  for (let id of req.body.ids) {
-    deletedImages.push(
-      await ImageModel.findByIdAndUpdate(id, { is_active: false }).catch(err =>
-        res.status(500).send(err)
-      )
-    );
-  }
-  res.json(deletedImages);
+  const { id } = req.params;
+  let image = await ImageModel.findByIdAndDelete(id).catch(err =>
+    res.status(500).send(err)
+  );
+  res.json(image);
 }
 
 async function update(req, res) {
-  let updatedImage = [];
-  for (let image of req.body.images) {
-    updatedImage.push(
-      await ImageModel.findByIdAndUpdate(image.id, {
-        s3key: image.s3key
-      }).catch(err => res.status(500).send(err))
-    );
-  }
-  res.json(updatedImage);
+  // let updatedImage = [];
+  // for (let image of req.body.images) {
+  //   updatedImage.push(
+  //     await ImageModel.findByIdAndUpdate(image.id, {
+  //       s3key: image.s3key
+  //     }).catch(err => res.status(500).send(err))
+  //   );
+  // }
+  // res.json(updatedImage);
+  console.log("Update");
 }
 
 module.exports = {

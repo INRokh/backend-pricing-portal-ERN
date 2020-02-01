@@ -29,7 +29,7 @@ router.post(
 
 // Batch delete images by IDs.
 router.delete(
-  "/",
+  "/:id",
   celebrate({
     body: {
       ids: Joi.array()
