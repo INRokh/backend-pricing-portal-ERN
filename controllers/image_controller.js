@@ -1,12 +1,11 @@
 const ImageModel = require("../database/models/image_model");
-
 const uuidv4 = require("uuid/v4");
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-
 const s3 = new AWS.S3();
 
+// Upload images from React to Express & S3
 const upload = multer({
   storage: multerS3({
     s3: s3,
@@ -40,6 +39,7 @@ function uploadFiles(req, res) {
   });
 }
 
+// List all apartments/images in JSON format.
 async function index(req, res) {
   const images = await ImageModel.find().catch(err =>
     res.status(500).send(err)
@@ -47,6 +47,7 @@ async function index(req, res) {
   res.json(images);
 }
 
+// Show a single image (through s3 key)
 function show(req, res) {
   s3.getObject({ Key: req.params.key, Bucket: process.env.BUCKET_NAME })
     .createReadStream()
@@ -54,6 +55,7 @@ function show(req, res) {
     .pipe(res);
 }
 
+// [Currently Not In Use] Batch create images.
 async function create(req, res) {
   let imageObjs = [];
   for (let image of req.body.images) {
@@ -65,6 +67,7 @@ async function create(req, res) {
   res.json(images);
 }
 
+// Delete a single image/apartment by ID.
 async function destroy(req, res) {
   const { id } = req.params;
   let image = await ImageModel.findByIdAndDelete(id).catch(err =>
@@ -73,17 +76,15 @@ async function destroy(req, res) {
   res.json(image);
 }
 
-async function update(req, res) {
-  // let updatedImage = [];
-  // for (let image of req.body.images) {
-  //   updatedImage.push(
-  //     await ImageModel.findByIdAndUpdate(image.id, {
-  //       s3key: image.s3key
-  //     }).catch(err => res.status(500).send(err))
-  //   );
-  // }
-  // res.json(updatedImage);
-  console.log("Update");
+async function update(req, res, next) {
+  console.log(req.body); //Keep it here to see info on console
+
+  await ImageModel.findByIdAndUpdate(req.params.id, {
+    lot: req.body.lot,
+    unitNumber: req.body.unitNumber,
+    productDescription: req.body.productDescription,
+    s3key: req.body.selectedFile // Currently, I do it with a cheeky way. When updating an apartment, the s3key in our database will be updated. But the file is not on AWS S3 hahahahah
+  });
 }
 
 module.exports = {
