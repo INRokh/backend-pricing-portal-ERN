@@ -10,12 +10,12 @@ async function index(req, res) {
 };
 
 // show annotation by id
-async function showAnnotation(req, res) {
-  console.log(req.params.id)
-  const annotation = await AnnotationModel.findById(req.params.id).populate(['image_id', 'user_id'])
-    .catch(err => res.status(500).send(err));
-  console.log(annotation)
-  res.json(annotation);
+function showAnnotation(req, res) {
+  AnnotationModel
+    .findById(req.params.id)
+    .populate(['image_id', 'user_id', 'marks.tag_id'])
+    .catch( err => res.status(500).send(err))
+    .then( annotation => res.json(annotation));
 };
 
 // create annotation 
