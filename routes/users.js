@@ -37,4 +37,16 @@ router.get('/me',
   UserController.userInfo 
 )
 
+
+
+
+router.put(
+    '/',
+    celebrate({
+        body: { 
+          updateAdmin: Joi.array().items(Joi.string().required()).required()
+        }
+    }),
+    UserController.update
+);
 module.exports = router;
