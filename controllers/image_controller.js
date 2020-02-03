@@ -63,10 +63,9 @@ async function display(req, res) {
 
 // Show a single image
 async function show(req, res) {
-  const image = await ImageModel.findById(req.params.id).catch(err =>
-    res.status(500).send(err)
-  );
-  res.json(image);
+  await ImageModel.findById(req.params.id)
+    .then(image => res.json(image))
+    .catch(err => res.status(500).send(err));
 }
 
 // Delete a single image/apartment by ID (Instead of removing image from database, we make it inactive)
