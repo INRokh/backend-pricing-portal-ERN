@@ -38,16 +38,17 @@ function userInfo(req, res, next){
 }
 
 async function update(req, res) {
-  console.log(req.body)
   let updatedUsers = []
   for(let u of req.body.updateAdmin){
-
     let user = await User.findByIdAndUpdate(u)
       .catch(err => res.status(500).send(err));
+    if(!user){
+      return;
+    }
     user.is_admin = true;
     await user.save()
       .catch(err => res.status(500).send(err));
-    updatedUsers.push(u)
+    updatedUsers.push(user)
     }
     res.json(updatedUsers)
 }
