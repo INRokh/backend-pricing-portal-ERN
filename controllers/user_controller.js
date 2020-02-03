@@ -37,9 +37,25 @@ function userInfo(req, res, next){
   });
 }
 
+async function update(req, res) {
+  console.log(req.body)
+  let updatedUsers = []
+  for(let u of req.body.updateAdmin){
+
+    let user = await User.findByIdAndUpdate(u)
+      .catch(err => res.status(500).send(err));
+    user.is_admin = true;
+    await user.save()
+      .catch(err => res.status(500).send(err));
+    updatedUsers.push(u)
+    }
+    res.json(updatedUsers)
+}
+
 module.exports = {
   index,
   login,
   register,
-  userInfo
+  userInfo,
+  update
 }
