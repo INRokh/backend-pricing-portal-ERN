@@ -8,55 +8,34 @@ router.post("/", ImageController.uploadFiles);
 // List all apartments/images in JSON format.
 router.get("/", ImageController.index);
 
-// Show a single image (through s3 key)
-router.get("/:key", ImageController.show);
+// Display a single image file (through s3 key)
+router.get("/:id/file", ImageController.display);
 
-// [Currently Not In Use] Batch create images.
-router.post(
-  "/",
-  celebrate({
-    body: {
-      images: Joi.array()
-        .items(
-          Joi.object({
-            s3key: Joi.string().required()
-          })
-        )
-        .min(1)
-    }
-  }),
-  ImageController.create
-);
+// Show a single image
+router.get("/:id", ImageController.show);
 
-// Delete a single image/apartment by ID.
-router.delete(
+// Edit a single image/apartment by ID.
+router.patch(
   "/:id",
   celebrate({
     body: {
-      ids: Joi.array()
-        .items(Joi.string().required())
-        .min(1)
+      lot: Joi.number().required(),
+      unitNumber: Joi.string().required(),
+      productDescription: Joi.string().required()
     }
   }),
-  ImageController.destroy
+  ImageController.update
 );
 
-// Uppdate an Image: If I turn celebrate on, the edit function won't work. I need to learn how to use celebrate :(
-router.post(
-  "/edit/:id",
-  // celebrate({
-  //   body: {
-  //     images: Joi.array()
-  //       .items(
-  //         Joi.object({
-  //           id: Joi.string().required(),
-  //           s3key: Joi.string().required()
-  //         })
-  //       )
-  //       .min(1)
-  //   }
-  // }),
-  ImageController.update
+// Delete a single image/apartment by ID (Instead of deleting in DB, we make it inactive).
+router.patch(
+  "/:id/inactive",
+  celebrate({
+    body: {
+      is_active: Joi.boolean().required()
+    }
+  }),
+  ImageController.inactive
 );
 
 module.exports = router;

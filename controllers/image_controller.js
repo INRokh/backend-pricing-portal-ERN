@@ -39,59 +39,60 @@ function uploadFiles(req, res) {
   });
 }
 
-// List all apartments/images in JSON format.
+// List all apartments/images (only active ones) in JSON format
 async function index(req, res) {
-  const images = await ImageModel.find().catch(err =>
+  const images = await ImageModel.find({ is_active: true }).catch(err =>
     res.status(500).send(err)
   );
   res.json(images);
 }
 
-// Show a single image (through s3 key)
-function show(req, res) {
-  s3.getObject({ Key: req.params.key, Bucket: process.env.BUCKET_NAME })
+// Display a single image (through s3 key)
+async function display(req, res) {
+  const image = await ImageModel.findById(req.params.id).catch(err =>
+    res.status(500).send(err)
+  );
+  if (!image) {
+    return;
+  }
+  s3.getObject({ Key: image.s3key, Bucket: process.env.BUCKET_NAME })
     .createReadStream()
     .on("error", err => res.status(500).send(err))
     .pipe(res);
 }
 
-// [Currently Not In Use] Batch create images.
-async function create(req, res) {
-  let imageObjs = [];
-  for (let image of req.body.images) {
-    imageObjs.push({ s3key: image.s3key });
-  }
-  const images = await ImageModel.insertMany(imageObjs).catch(err =>
-    res.status(500).send(err)
-  );
-  res.json(images);
-}
-
-// Delete a single image/apartment by ID.
-async function destroy(req, res) {
-  const { id } = req.params;
-  let image = await ImageModel.findByIdAndDelete(id).catch(err =>
+// Show a single image
+async function show(req, res) {
+  const image = await ImageModel.findById(req.params.id).catch(err =>
     res.status(500).send(err)
   );
   res.json(image);
 }
 
-async function update(req, res, next) {
-  console.log(req.body); //Keep it here to see info on console
+// Delete a single image/apartment by ID (Instead of removing image from database, we make it inactive)
+async function inactive(req, res) {
+  const image = await ImageModel.findByIdAndUpdate(req.params.id, {
+    is_active: req.body.is_active
+  }).catch(err => res.status(500).send(err));
 
-  await ImageModel.findByIdAndUpdate(req.params.id, {
+  res.json(image);
+}
+
+async function update(req, res, next) {
+  const image = await ImageModel.findByIdAndUpdate(req.params.id, {
     lot: req.body.lot,
     unitNumber: req.body.unitNumber,
-    productDescription: req.body.productDescription,
-    s3key: req.body.selectedFile // Currently, I do it with a cheeky way. When updating an apartment, the s3key in our database will be updated. But the file is not on AWS S3 hahahahah
-  });
+    productDescription: req.body.productDescription
+  }).catch(err => res.status(500).send(err));
+
+  res.json(image);
 }
 
 module.exports = {
-  create,
-  destroy,
+  inactive,
   index,
-  show,
+  display,
   update,
-  uploadFiles
+  uploadFiles,
+  show
 };
