@@ -38,15 +38,15 @@ router.put(
 );
 
 router.patch(
-  "/reject/:id", AnnotationController.reject
+  "/:id/reject/", AnnotationController.reject
 )
 
 router.patch(
-  "/approve/:id", AnnotationController.approve
+  "/:id/approve/", AnnotationController.approve
 )
 
 router.patch(
-  "/review/:id", AnnotationController.review
+  "/:id/review/", AnnotationController.review
 )
 
 module.exports = router;

@@ -89,7 +89,7 @@ async function approve(req, res) {
 async function reject(req, res) {
   const annotation = await AnnotationModel.findById(req.params.id)
     .catch(err => res.status(500).send(err));
-  annotation.status = "NEW"
+  annotation.status = "IN_PROGRESS"
   await annotation.save()
     .catch(err => res.status(500).send(err));
   res.json(annotation);
