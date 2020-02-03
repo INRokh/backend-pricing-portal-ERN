@@ -1,6 +1,11 @@
 const { Schema } = require("mongoose");
 
 const ImageSchema = new Schema({
+  is_active: {
+    type: Boolean,
+    default: true,
+    required: true
+  },
   s3key: {
     type: String,
     required: true
