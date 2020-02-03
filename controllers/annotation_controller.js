@@ -4,9 +4,16 @@ const ImageModel = require('../database/models/image_model');
 
 // show assigned annotations to user
 async function index(req, res) {
-  const annotations = await AnnotationModel.find({user_id: req.user._id}).populate('image_id')
+  // If admin, show all annotations,
+  // if user apply restriction, showing only assigned annotations.
+  let filter = null;
+  if (!req.user.is_admin) {
+    filter = {user_id: req.user._id};
+  }
+  AnnotationModel.find(filter)
+    .populate('image_id')
+    .then(annotations => res.json(annotations))
     .catch(err => res.status(500).send(err));
-  res.json(annotations);
 };
 
 // show annotation by id
