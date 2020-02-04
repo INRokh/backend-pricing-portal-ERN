@@ -45,10 +45,17 @@ async function update(req, res) {
     if(!user){
       return;
     }
-    user.is_admin = true;
-    await user.save()
+    if (user.is_admin !== true) {
+      user.is_admin = true;
+      await user.save()
       .catch(err => res.status(500).send(err));
-    updatedUsers.push(user)
+      updatedUsers.push(user)
+    } else {
+      user.is_admin = false;
+      await user.save()
+      .catch(err => res.status(500).send(err));
+      updatedUsers.push(user)
+    }
     }
     res.json(updatedUsers)
 }
