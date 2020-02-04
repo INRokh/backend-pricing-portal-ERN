@@ -19,7 +19,8 @@ router.post('/', celebrate({
       password: Joi.string().required(),
   }
   }), 
-  UserController.register);
+  UserController.register
+);
 
 // Get jwt token using passport-local-mongoose strategy 
 router.post('/login', celebrate({
@@ -35,10 +36,7 @@ router.post('/login', celebrate({
 router.get('/me',
   passport.authenticate('jwt', { session : false }),
   UserController.userInfo 
-)
-
-
-
+);
 
 router.put(
     '/',
@@ -49,4 +47,5 @@ router.put(
     }),
     UserController.update
 );
+
 module.exports = router;
