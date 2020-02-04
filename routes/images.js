@@ -1,18 +1,19 @@
 const router = require("express").Router();
 const { celebrate, Joi } = require("celebrate");
 const ImageController = require("../controllers/image_controller");
+const passport = require('passport');
 
 // Upload images from React to Express & S3
-router.post("/", ImageController.uploadFiles);
+router.post("/", passport.authenticate('jwt', { session : false }), ImageController.uploadFiles);
 
 // List all apartments/images in JSON format.
-router.get("/", ImageController.index);
+router.get("/", passport.authenticate('jwt', { session : false }), ImageController.index);
 
 // Display a single image file (through s3 key)
 router.get("/:id/file", ImageController.display);
 
 // Show a single image
-router.get("/:id", ImageController.show);
+router.get("/:id", passport.authenticate('jwt', { session : false }), ImageController.show);
 
 // Edit a single image/apartment by ID.
 router.patch(
@@ -24,6 +25,7 @@ router.patch(
       productDescription: Joi.string().required()
     }
   }),
+  passport.authenticate('jwt', { session : false }),
   ImageController.update
 );
 
@@ -35,6 +37,7 @@ router.patch(
       is_active: Joi.boolean().required()
     }
   }),
+  passport.authenticate('jwt', { session : false }),
   ImageController.inactive
 );
 

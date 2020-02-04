@@ -1,12 +1,19 @@
 const passport = require('passport');
 const router = require('express').Router();
 
-router.use('/tags', require('./tags'));
-router.use('/images', require('./images'));
+// Login is here, don't use jwt strategy.
 router.use('/users', require('./users'));
+
+router.use('/tags',
+  passport.authenticate('jwt', { session : false }),
+  require('./tags'));
+
+  router.use('/images',
+  //passport.authenticate('jwt', { session : false }),
+  require('./images'));
+
 router.use('/annotations', 
   passport.authenticate('jwt', { session : false }), 
-  require('./annotations')
-)
+  require('./annotations'));
 
 module.exports = router;

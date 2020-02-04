@@ -11,6 +11,7 @@ async function index(req, res) {
     filter = {user_id: req.user._id};
   }
   AnnotationModel.find(filter)
+    .sort('status')
     .populate('image_id')
     .then(annotations => res.json(annotations))
     .catch(err => res.status(500).send(err));
