@@ -1,43 +1,44 @@
 {
-  "name": "backend-pricing-portal",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-server": "nodemon index.js",
-    "server": "forever -c \"nodemon --exitcrash -L\" index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/INRokh/backend-pricing-portal-ERN"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/INRokh/backend-pricing-portal-ERN/issues"
-  },
-  "homepage": "https://github.com/INRokh/backend-pricing-portal-ERN#readme",
-  "dependencies": {
-    "aws-sdk": "^2.607.0",
-    "celebrate": "^11.0.1",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "local": "^0.3.3",
-    "mongoose": "^5.8.7",
-    "morgan": "^1.9.1",
-    "multer": "^1.4.2",
-    "multer-s3": "^2.9.0",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.0.1",
-    "uuid": "^3.4.0"
-  },
-  "devDependencies": {
-    "forever": "^2.0.0",
-    "nodemon": "^2.0.2"
-  }
+	"name": "backend-pricing-portal",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev-server": "nodemon index.js",
+		"server": "forever -c \"nodemon --exitcrash -L\" index.js",
+		"start": "node index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/INRokh/backend-pricing-portal-ERN"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/INRokh/backend-pricing-portal-ERN/issues"
+	},
+	"homepage": "https://github.com/INRokh/backend-pricing-portal-ERN#readme",
+	"dependencies": {
+		"aws-sdk": "^2.607.0",
+		"celebrate": "^11.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"jsonwebtoken": "^8.5.1",
+		"local": "^0.3.3",
+		"mongoose": "^5.8.7",
+		"morgan": "^1.9.1",
+		"multer": "^1.4.2",
+		"multer-s3": "^2.9.0",
+		"passport": "^0.4.1",
+		"passport-jwt": "^4.0.0",
+		"passport-local": "^1.0.0",
+		"passport-local-mongoose": "^6.0.1",
+		"uuid": "^3.4.0"
+	},
+	"devDependencies": {
+		"forever": "^2.0.0",
+		"nodemon": "^2.0.2"
+	}
 }
