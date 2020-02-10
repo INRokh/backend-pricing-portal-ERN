@@ -60,20 +60,26 @@ async function rewriteMarks(req, res){
   }
 
   const {marks} = req.body;
-  let markObjs = [];
-  for (let i in marks) {
-    let markObj = {
-      tag_id: marks[i].tag_id,
-      coordinates: []
+  // TIP: Should consider avoid using `for ... in` on arrays
+  // WHY: The order in what `for ... in` will iterate 
+  // over the indexs is unpredictable. This can lead to unexpected issues
+  // although in this case the order is not important so it's fine.
+  // You should consider using `for ... of` or in this case `Array.prototype.map()`
+  // so you can avoid pushing into empty array `markObjs` and `marks[i].coordinates`. 
+  // Pushing into empty arrays can also lead to unexpected issues in 
+  // cases where you forget to clear the array.
+  // Something like is:
+  const markObjs = marks.map((mark) => {
+    return {
+      tag_id: mark.tag_id,
+      coordinates: mark.coordinates.map((coordinates) => {
+        return {
+          x: coordinates.x,
+          y: coordinates.y,
+        };
+      }),
     };
-    for (let j in marks[i].coordinates) {
-      markObj.coordinates.push({
-        x: marks[i].coordinates[j].x,
-        y: marks[i].coordinates[j].y
-      });
-    }
-    markObjs.push(markObj);
-  }
+  });
 
   annotation.marks = markObjs;
   if(annotation.status === "NEW"){
@@ -95,12 +101,15 @@ async function approve(req, res) {
 
 
 async function reject(req, res) {
-  const annotation = await AnnotationModel.findById(req.params.id)
-    .catch(err => res.status(500).send(err));
-  annotation.status = "IN_PROGRESS"
-  await annotation.save()
-    .catch(err => res.status(500).send(err));
-  res.json(annotation);
+  // TIP: Should consider using try catch to avoid repeating yourslef like so:
+  try {
+    const annotation = await AnnotationModel.findById(req.params.id);
+    annotation.status = "IN_PROGRESS"
+    await annotation.save();
+    res.json(annotation);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 };
 
 async function review(req, res) {

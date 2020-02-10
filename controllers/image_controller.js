@@ -22,6 +22,7 @@ function uploadFiles(req, res) {
     if (err) {
       return res.status(500).send(err);
     }
+    // TIP: could use `Array.prototype.map()` in this case
     let newImagesUploaded = [];
     for (let f of req.files) {
       newImagesUploaded.push({
