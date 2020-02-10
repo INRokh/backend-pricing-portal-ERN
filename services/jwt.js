@@ -12,6 +12,11 @@ function userToToken(user){
 
 function tokenToUser(jwt, done){
   User.findById(jwt.user_id)
+    // TIP: the following `user ? user : false` could also be
+    // written as `user || false`. This way is a bit more compact and
+    // you dont need to repeat the variable name.
+    // BREAKDOWN: left || right
+    // if left expression is truthy use it, else use right.
     .then(user => done(null, user ? user : false))
     .catch(err => done(err));
 }
